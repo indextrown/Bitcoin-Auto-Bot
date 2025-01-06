@@ -8,3 +8,4 @@
 
 pyupbit
 python-dotenv
+matplotlib

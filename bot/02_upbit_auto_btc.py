@@ -51,7 +51,7 @@ from dotenv import load_dotenv
 import os
 import pandas as pd
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # load .env
 load_dotenv()
@@ -88,32 +88,46 @@ rsi14_series = GetRSI(df, 14)
 current_rsi14 = float(rsi14_series.iloc[-1])  # 현재 RSI 값
 previous_rsi14 = float(rsi14_series.iloc[-2])  # 이전 4시간 봉의 RSI 값
 
+# ohlcv 데이터에서 4시간봉 시작 및 종료 시간 파악
+last_candle_time = df.index[-1]  # 가장 최근 봉의 시작 시간
+start_time_str = last_candle_time.strftime('%Y-%m-%d %H:%M:%S')
+end_time = last_candle_time + timedelta(hours=4)
+end_time_str = end_time.strftime('%Y-%m-%d %H:%M:%S')
+
+
 # print("BTC_BOT_WORKING")
 # print("NOW RSI:", current_rsi14)
 
 # 알림 메시지 작성
 current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-message = f"""
-[비트코인 매수!]
-- 현재 시간: {current_time}
-- 현재 RSI(실시간): {current_rsi14:.2f}
-- 이전 4시간 봉 RSI(고정값): {previous_rsi14:.2f}
-"""
 
 # 4시간분봉 기준으로 rs4지표가 30이하면 매수진행
 if current_rsi14 <= 30: 
     # 비트코인 시장가 구매
     buy_result = upbit.buy_market_order("KRW-BTC", 5000)
-    message += f"""
-    - 매수 진행: RSI 값이 30 이하
-    - 매수 금액: 5,000원
-    - 주문 결과: {buy_result}
-    """
+    message = f"""
+[!!비트코인 매수 성공!!]
+- 현재 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+- 현재 4시간봉 구간: {start_time_str} ~ {end_time_str}
+- 현재 RSI(실시간): {current_rsi14:.2f}
+- 이전 4시간 봉 RSI(고정값): {previous_rsi14:.2f}
+- 매수 진행: RSI 값이 30 이하
+- 매수 금액: 5,000원
+- 주문 결과: {buy_result}\n
+"""
     print(message)
     # 슬랙 알림 발송
     alarm(Slack_key, "#aws-ec2-alarm", message)
+
 else:
-    message += "- 매수 조건 미충족: RSI 값이 30 초과\n"
+    message = f"""
+[매수 실패]
+- 현재 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+- 현재 4시간봉 구간: {start_time_str} ~ {end_time_str}
+- 현재 RSI(실시간): {current_rsi14:.2f}
+- 이전 4시간 봉 RSI(고정값): {previous_rsi14:.2f}
+- 매수 조건 미충족: RSI 값이 30 초과\n
+"""
     # alarm(Slack_key, "#aws-ec2-alarm", message)
     print(message)
 
