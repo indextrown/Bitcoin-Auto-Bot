@@ -1,0 +1,11 @@
+# git rm --cached .DS_Store
+# git commit -m "Remove .DS_Store from Git tracking"
+
+# 만약 .DS_Store 외의 파일도 무시되도록 .gitignore를 설정했으나 여전히 문제가 발생하면 Git 캐시를 강제로 갱신합니다:
+# git rm -r --cached .
+# git add .
+# git commit -m "Refresh .gitignore rules"
+
+.env
+.DS_Store
+.venv
