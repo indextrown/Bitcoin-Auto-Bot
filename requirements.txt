@@ -1,0 +1,20 @@
+# pip install --upgrade pip setuptools wheel 
+# pip install -r requirements.txt
+# deactivate  # 기존 가상 환경 비활성화
+# rm -rf .venv  # 기존 가상 환경 삭제
+# python -m venv .venv  # 새 가상 환경 생성
+# source .venv/bin/activate  # 가상 환경 활성화
+# pip install --upgrade pip setuptools wheel  # pip 및 관련 도구 업그레이드
+
+# 비트코인 자동매매
+pyupbit
+python-dotenv
+matplotlib
+
+# 비트코인 백테스팅
+pandas
+numpy
+openpyxl
+matplotlib
+
+
