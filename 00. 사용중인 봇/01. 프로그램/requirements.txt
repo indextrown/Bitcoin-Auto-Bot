@@ -6,18 +6,5 @@
 # source .venv/bin/activate  # 가상 환경 활성화
 # pip install --upgrade pip setuptools wheel  # pip 및 관련 도구 업그레이드
 
-# .venv/bin/python -m pip install --upgrade pip
-# .venv/bin/python -m pip install -r requirements.txt
-
-# 비트코인 자동매매
 pyupbit
 python-dotenv
-matplotlib
-tabulate
-
-# 비트코인 백테스팅
-pandas
-numpy
-openpyxl
-matplotlib
-
